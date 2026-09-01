@@ -1,4 +1,4 @@
-from frontend_preeti import render_header, render_bust_alert, render_interval
+from frontend import render_header, render_bust_alert, render_interval
 import streamlit as st, pandas as pd
 st.title("SIH26079 - Forecast Bust Detection")
 c1,c2 = st.columns(2)
