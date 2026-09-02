@@ -226,8 +226,6 @@ def render_header():
                                      padding: 3px 10px; border-radius: 20px; letter-spacing: 0.05em;">SIH26079</span>
                         <span style="background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 700; 
                                      padding: 3px 10px; border-radius: 20px;">OPERATIONAL DECISION-SUPPORT SYSTEM</span>
-                        <span style="background: #f1f5f9; color: #475569; font-size: 0.75rem; font-weight: 600; 
-                                     padding: 3px 10px; border-radius: 20px;">LIGHT THEME</span>
                     </div>
                     <h1 style="font-size: 2.1rem; font-weight: 800; color: #0f172a; margin: 0 0 6px 0; letter-spacing: -0.02em;">
                         AI-Based Forecast Bust Detection for Medium-Range Weather Forecasts
@@ -549,7 +547,7 @@ def render_step8_teleconnections(enso_val: float, iod_val: float, mjo_phase: int
         showlegend=True,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 # --------------------------------------------------------------------------
 # 5. STEP 9: Physics-Grounded Confidence Baseline (Lorenz Lyapunov)
