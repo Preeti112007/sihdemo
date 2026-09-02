@@ -1,7 +1,8 @@
 """
 Frontend Module for SIH26079 — AI-Based Forecast Bust Detection
 Strict Light Theme Only (Professional Meteorological Decision-Support System)
-Implements UI & Visualizations for Step 7-10 and Step 13-14 with Academic & Physical Groundings.
+Implements UI & Visualizations for Core Meteorological Architecture & Groundings.
+Official Repository: https://github.com/Preeti112007/sihdemo
 """
 
 import streamlit as st
@@ -9,6 +10,8 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
+
+GITHUB_REPO_URL = "https://github.com/Preeti112007/sihdemo"
 
 # --------------------------------------------------------------------------
 # 1. Custom CSS for Strict Light Theme & Modern Scientific Aesthetics
@@ -39,8 +42,6 @@ def inject_light_theme_css():
             --risk-amber-bg: #fffbeb;
             --risk-red: #b91c1c;
             --risk-red-bg: #fef2f2;
-            --accent-purple: #6d28d9;
-            --accent-purple-bg: #faf5ff;
             --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
             --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
             --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.1);
@@ -48,8 +49,8 @@ def inject_light_theme_css():
 
         html, body, [class*="css"] {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--text-main) !important;
-            background-color: var(--bg-secondary) !important;
+            color: #0f172a !important;
+            background-color: #f8fafc !important;
         }
 
         .stApp {
@@ -65,6 +66,7 @@ def inject_light_theme_css():
             padding: 18px 20px;
             box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
             transition: all 0.2s ease-in-out;
+            height: 100%;
         }
         .metric-card:hover {
             border-color: #cbd5e1;
@@ -80,7 +82,7 @@ def inject_light_theme_css():
             margin-bottom: 6px;
         }
         .metric-value {
-            font-size: 1.75rem;
+            font-size: 1.7rem;
             font-weight: 700;
             color: #0f172a;
             line-height: 1.2;
@@ -109,6 +111,40 @@ def inject_light_theme_css():
         }
         .grounding-box strong {
             color: #1e3a8a;
+        }
+
+        /* Step Card Container */
+        .step-container {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+        }
+        .step-header-badge {
+            display: inline-block;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: 700;
+            font-size: 0.78rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.04em;
+            margin-bottom: 8px;
+            border: 1px solid #dbeafe;
+        }
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .step-desc {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-bottom: 14px;
+            line-height: 1.5;
         }
 
         /* Bust Alert Banner */
@@ -149,41 +185,6 @@ def inject_light_theme_css():
             justify-content: space-between;
         }
 
-        /* Step Card Container */
-        .step-container {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
-        }
-        .step-header-badge {
-            display: inline-block;
-            background: #eff6ff;
-            color: #1d4ed8;
-            font-weight: 700;
-            font-size: 0.78rem;
-            padding: 4px 10px;
-            border-radius: 6px;
-            letter-spacing: 0.04em;
-            margin-bottom: 8px;
-            border: 1px solid #dbeafe;
-        }
-        .step-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 6px;
-        }
-        .step-desc {
-            font-size: 0.9rem;
-            color: #475569;
-            margin-bottom: 16px;
-            line-height: 1.5;
-        }
-
-        /* Section dividers and code chips */
         .code-chip {
             font-family: 'JetBrains Mono', monospace;
             background: #f1f5f9;
@@ -209,16 +210,16 @@ def inject_light_theme_css():
     )
 
 # --------------------------------------------------------------------------
-# 2. Header & Banner Renderers
+# 2. Header & Branding with GitHub Integration
 # --------------------------------------------------------------------------
 def render_header():
-    """Renders the top title and problem reframing banner in light theme."""
+    """Renders top header with SIH26079 metadata, problem reframing, and GitHub link."""
     inject_light_theme_css()
     st.markdown(
-        """
+        f"""
         <div style="background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%); 
-                    border: 1px solid #dbeafe; border-radius: 16px; padding: 24px 28px; 
-                    margin-bottom: 24px; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.06);">
+                    border: 1px solid #dbeafe; border-radius: 16px; padding: 22px 26px; 
+                    margin-bottom: 20px; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.06);">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
@@ -227,13 +228,23 @@ def render_header():
                         <span style="background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: 700; 
                                      padding: 3px 10px; border-radius: 20px;">OPERATIONAL DECISION-SUPPORT SYSTEM</span>
                     </div>
-                    <h1 style="font-size: 2.1rem; font-weight: 800; color: #0f172a; margin: 0 0 6px 0; letter-spacing: -0.02em;">
+                    <h1 style="font-size: 2.0rem; font-weight: 800; color: #0f172a; margin: 0 0 6px 0; letter-spacing: -0.02em;">
                         AI-Based Forecast Bust Detection for Medium-Range Weather Forecasts
                     </h1>
-                    <p style="font-size: 0.98rem; color: #475569; margin: 0; max-width: 900px; line-height: 1.5;">
-                        <strong>Problem Reframing:</strong> Meta-forecasting pipeline predicting <em>forecast reliability</em> 
-                        and error boundaries rather than raw weather. Grounded in dynamical chaos, information theory, and adaptive conformal prediction.
+                    <p style="font-size: 0.95rem; color: #475569; margin: 0; max-width: 920px; line-height: 1.5;">
+                        <strong>Problem Statement Scope:</strong> Meta-forecasting pipeline quantifying NWP forecast reliability 
+                        (GFS / ECMWF) through mathematical foundations, atmospheric chaos, data engineering, and adaptive conformal prediction.
                     </p>
+                </div>
+                <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                    <a href="{GITHUB_REPO_URL}" target="_blank" style="text-decoration: none;">
+                        <div style="background: #0f172a; color: #ffffff; padding: 8px 16px; border-radius: 10px; 
+                                    font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; 
+                                    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15); transition: background 0.2s;">
+                            <span>📦</span> GitHub Repository
+                        </div>
+                    </a>
+                    <span style="font-size: 0.75rem; color: #64748b; font-family: 'JetBrains Mono', monospace;">Preeti112007/sihdemo</span>
                 </div>
             </div>
         </div>
@@ -310,25 +321,6 @@ def render_bust_alert(region_name: str, bust_probability: float, predicted_error
             unsafe_allow_html=True,
         )
 
-def render_interval(lower: float, upper: float, point_pred: float, unit: str = "mm", confidence: float = 0.90):
-    """Renders the Conformal Confidence Interval card."""
-    width = max(0.0, upper - lower)
-    st.markdown(
-        f"""
-        <div class="metric-card">
-            <div class="metric-label">{int(confidence*100)}% Calibrated Conformal Interval (Step 13)</div>
-            <div class="metric-value" style="color: #2563eb;">
-                [{lower:.2f}, {upper:.2f}] <span style="font-size: 1.1rem; color: #64748b; font-weight: 500;">{unit}</span>
-            </div>
-            <div class="metric-sub">
-                <span>Point Estimate: <strong>{point_pred:.2f} {unit}</strong></span> &bull; 
-                <span>Interval Width: <strong>{width:.2f} {unit}</strong></span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
 def render_grounding(scientist: str, concept: str, role: str):
     """Renders academic/physics grounding badge box."""
     st.markdown(
@@ -341,21 +333,216 @@ def render_grounding(scientist: str, concept: str, role: str):
     )
 
 # --------------------------------------------------------------------------
-# 3. STEP 7: Standard Meteorological Feature Construction
+# 3. Foundation & Problem Framing (Groundings: Richardson, Lorenz, Kolmogorov, Charney)
+# --------------------------------------------------------------------------
+def render_phase1_foundation():
+    """Renders Problem Reframing, 4 Deliverables, and Atmospheric Physics."""
+    st.markdown(
+        """
+        <div class="step-container">
+            <span class="step-header-badge">FOUNDATION &amp; PROBLEM FRAMING</span>
+            <div class="step-title">Problem Reframing &amp; 4 Mandatory Deliverables</div>
+            <div class="step-desc">
+                The system does not forecast the weather itself. Instead, it predicts <strong>how reliable an existing NWP forecast (GFS / ECMWF / NCUM) is</strong> — 
+                this is a <em>meta-forecasting problem</em>, not a weather-prediction problem.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    render_grounding(
+        "Lewis Fry Richardson (1922)",
+        "Weather Prediction by Numerical Process",
+        "Formulated the first concrete method for Numerical Weather Prediction (NWP) by solving physical atmospheric equations. This project extends Richardson's vision: not just producing a forecast, but quantifying how much that forecast can be trusted."
+    )
+
+    st.markdown("#### The 4 Mandatory Project Deliverables")
+    d1, d2 = st.columns(2)
+    with d1:
+        st.markdown(
+            """
+            <div class="metric-card" style="margin-bottom: 12px;">
+                <div class="metric-label">Deliverable 1</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: #1d4ed8;">🗺️ Forecast Confidence Map</div>
+                <div class="metric-sub" style="font-size: 0.85rem; line-height: 1.4; margin-top: 6px;">
+                    Spatial, per lead time (Day 1–10) geographical uncertainty visualization across Indian states, union territories, and synoptic zones.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+            <div class="metric-card">
+                <div class="metric-label">Deliverable 2</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: #dc2626;">🎯 Forecast Bust Probability</div>
+                <div class="metric-sub" style="font-size: 0.85rem; line-height: 1.4; margin-top: 6px;">
+                    A calibrated probability score P(Error &gt; Threshold) representing the likelihood of severe forecast failure.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with d2:
+        st.markdown(
+            """
+            <div class="metric-card" style="margin-bottom: 12px;">
+                <div class="metric-label">Deliverable 3</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: #b45309;">⚠️ Error-Prone Area Detection</div>
+                <div class="metric-sub" style="font-size: 0.85rem; line-height: 1.4; margin-top: 6px;">
+                    Static and dynamic risk zones combining complex terrain flags (Western Ghats, Himalayan foothills) with historical error density.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+            <div class="metric-card">
+                <div class="metric-label">Deliverable 4</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: #059669;">💡 Explainable Output</div>
+                <div class="metric-sub" style="font-size: 0.85rem; line-height: 1.4; margin-top: 6px;">
+                    Transparent physical attribution mapping why uncertainty is elevated (ensemble divergence, shear gradients, synoptic transitions).
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+
+    # Atmospheric Physics & Root Causes
+    st.markdown(
+        """
+        <div class="step-container">
+            <span class="step-header-badge">ATMOSPHERIC PHYSICS &amp; DYNAMICAL INSTABILITY</span>
+            <div class="step-title">Root Causes of Forecast Failure &amp; Chaotic Divergence</div>
+            <div class="step-desc">
+                The atmosphere is a chaotic dynamical system — small errors in the initial state grow exponentially over time, 
+                making long-lead-time predictions inherently uncertain.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    render_grounding(
+        "Edward Lorenz (MIT, 1963)",
+        "Deterministic Chaos & Butterfly Effect",
+        "Discovered that deterministic atmospheric equations exhibit extreme sensitivity to initial conditions. Introduced Lyapunov divergence exponent quantifying how rapidly nearby atmospheric trajectories separate."
+    )
+    render_grounding(
+        "Andrey Kolmogorov (1941)",
+        "K41 Turbulence Theory",
+        "Developed the statistical theory of turbulence cascade, explaining how energy cascades from large synoptic scales down to micro-scales — the exact physical mechanism driving chaotic error growth."
+    )
+    render_grounding(
+        "Jule Charney (1950)",
+        "Baroclinic Instability & ENIAC Forecast",
+        "Father of modern dynamical meteorology who produced the first computer weather forecast (ENIAC, 1950). His theory of baroclinic instability mathematically explains how small disturbances grow explosively into monsoon depressions and cyclones."
+    )
+
+# --------------------------------------------------------------------------
+# 4. Data Pipeline & Error Database (ERA5, GFS, Disclaimer, Fei-Fei Li)
+# --------------------------------------------------------------------------
+def render_phase2_data_pipeline():
+    """Renders ERA5, GFS/IMD Data pipeline, Transparency Disclaimer, and Error DB."""
+    st.markdown(
+        """
+        <div class="step-container">
+            <span class="step-header-badge">DATA PIPELINE &amp; BENCHMARK BENCHMARK</span>
+            <div class="step-title">Ground Truth, Forecast Archives &amp; Paired Error Database</div>
+            <div class="step-desc">
+                Building a rigorous, reproducible meteorological verification pipeline connecting ERA5 reanalysis, GFS forecasts, and IMD gridded rainfall.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    p1, p2 = st.columns(2)
+    with p1:
+        st.markdown(
+            """
+            <div class="metric-card" style="margin-bottom: 12px;">
+                <div class="metric-label">Ground Truth Collection</div>
+                <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">ERA5 Reanalysis (Copernicus CDS)</div>
+                <div class="metric-sub" style="font-size: 0.85rem; line-height: 1.4; margin-top: 6px;">
+                    Downloaded via <span class="code-chip">cdsapi</span> Python client. ERA5 represents the best available reconstruction of atmospheric ground truth.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with p2:
+        st.markdown(
+            """
+            <div class="metric-card" style="margin-bottom: 12px;">
+                <div class="metric-label">Forecast Data Collection</div>
+                <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a;">GFS Archives &amp; IMD / IITM 0.25&deg; Grid</div>
+                <div class="metric-sub" style="font-size: 0.85rem; line-height: 1.4; margin-top: 6px;">
+                    GFS forecast archives from NOAA NOMADS / AWS Open Data (<span class="code-chip">s3://noaa-gfs-bdp-pds</span>) covering Day 1–10 lead times, supplemented by IMD gridded rainfall.
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # Data Access Transparency
+    st.markdown(
+        """
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 5px solid #2563eb; 
+                    border-radius: 10px; padding: 16px 20px; margin: 12px 0;">
+            <div style="font-size: 0.8rem; font-weight: 800; color: #1d4ed8; text-transform: uppercase; letter-spacing: 0.05em;">
+                Data Access Transparency (Critical for Credibility)
+            </div>
+            <p style="font-size: 0.92rem; color: #1e3a8a; font-style: italic; margin: 8px 0 0 0; line-height: 1.5;">
+                "Operational NCMRWF and IMD internal forecast feeds are access-restricted and not publicly downloadable within a hackathon timeframe. 
+                We constructed our prototype pipeline using ERA5 as ground truth and GFS as the forecast source. 
+                The architecture is engineered such that these can be directly replaced with NCMRWF's internal data feed in a production deployment, with no change to the modeling pipeline."
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Error Database Construction
+    st.markdown(
+        """
+        <div class="step-container" style="margin-top: 14px;">
+            <div class="step-title">Paired Error Database: <span class="code-chip">error = |forecast(lead=L) - actual|</span></div>
+            <div class="step-desc">
+                For every grid point: <span class="code-chip">error = |forecast(lead = L, valid_time = T) - actual(T)|</span>. 
+                This paired (forecast, error) dataset serves as the supervised training label for bust detection models.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    render_grounding(
+        "Fei-Fei Li (Stanford)",
+        "ImageNet Benchmark Dataset Philosophy",
+        "Established that constructing a large, clean, well-labeled dataset is itself a foundational scientific contribution. This paired forecast-error database is our 'ImageNet moment' — a reusable benchmark dataset for Indian NWP forecast verification."
+    )
+
+# --------------------------------------------------------------------------
+# 5. Meteorological Feature Engineering (Palmer, Epstein & Leith)
 # --------------------------------------------------------------------------
 def render_step7_features(features_dict: dict):
     """
-    Renders Step 7: Standard Meteorological Feature Construction.
+    Renders Standard Meteorological Feature Construction.
     Features: Ensemble spread, Forecast Jump, Synoptic regime, Spatial gradients, Orography, Lead Time.
     Grounding: Tim Palmer & Edward Epstein / Cecil Leith.
     """
     st.markdown(
         """
         <div class="step-container">
-            <span class="step-header-badge">PHASE 3 &bull; FEATURE ENGINEERING</span>
-            <div class="step-title">Step 7 — Standard Meteorological Feature Construction</div>
+            <span class="step-header-badge">METEOROLOGICAL FEATURE ENGINEERING</span>
+            <div class="step-title">Physical &amp; Dynamic Meteorological Predictors</div>
             <div class="step-desc">
-                Constructs multi-resolution physical and dynamic predictors per grid cell and lead time to capture atmospheric uncertainty generators.
+                Builds 6 standard meteorological feature groups per grid cell and lead time to capture uncertainty generators across synoptic and topographic scales.
             </div>
         </div>
         """,
@@ -365,12 +552,12 @@ def render_step7_features(features_dict: dict):
     render_grounding(
         "Tim Palmer (ECMWF / Oxford)",
         "Stochastic Parameterization",
-        "ECMWF research leader whose work established ensemble spread as a rigorous physical proxy for sub-grid scale atmospheric uncertainty."
+        "ECMWF research leader whose work established ensemble spread as a rigorous physical proxy for unresolved sub-grid scale atmospheric uncertainty."
     )
     render_grounding(
         "Edward Epstein & Cecil Leith (1969)",
         "Stochastic-Dynamic Forecasting",
-        "First to propose running perturbed model ensembles and utilizing their spread as a quantitative uncertainty metric."
+        "First to propose running perturbed model ensembles and utilizing their spread as a direct, quantitative measure of uncertainty."
     )
 
     col1, col2, col3 = st.columns(3)
@@ -380,7 +567,7 @@ def render_step7_features(features_dict: dict):
             <div class="metric-card">
                 <div class="metric-label">1. Ensemble Spread (GFS / ECMWF / ICON)</div>
                 <div class="metric-value">{features_dict.get('ensemble_spread', 2.45):.2f} <span style="font-size: 1rem; color:#64748b;">mm</span></div>
-                <div class="metric-sub">Multi-model standard deviation &sigma;<sub>ens</sub></div>
+                <div class="metric-sub">Multi-model proxy standard deviation &sigma;<sub>ens</sub></div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -391,7 +578,7 @@ def render_step7_features(features_dict: dict):
             <div class="metric-card">
                 <div class="metric-label">2. Forecast Jump (00Z vs 12Z Run)</div>
                 <div class="metric-value">{features_dict.get('forecast_jump', 3.80):.2f} <span style="font-size: 1rem; color:#64748b;">mm</span></div>
-                <div class="metric-sub">|F<sub>12Z</sub> - F<sub>00Z</sub>| run inconsistency</div>
+                <div class="metric-sub">|F<sub>12Z</sub> - F<sub>00Z</sub>| run-to-run shift</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -400,9 +587,9 @@ def render_step7_features(features_dict: dict):
         st.markdown(
             f"""
             <div class="metric-card">
-                <div class="metric-label">3. Lead Time</div>
+                <div class="metric-label">3. Forecast Lead Time</div>
                 <div class="metric-value">Day {features_dict.get('lead_time', 5)} <span style="font-size: 1rem; color:#64748b;">/ 10</span></div>
-                <div class="metric-sub">Monotonic error growth index</div>
+                <div class="metric-sub">Monotonic error growth baseline</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -414,9 +601,9 @@ def render_step7_features(features_dict: dict):
         st.markdown(
             f"""
             <div class="metric-card">
-                <div class="metric-label">4. Synoptic Regime</div>
-                <div class="metric-value" style="font-size: 1.3rem; color: #1d4ed8;">{features_dict.get('synoptic_regime', 'Monsoon Depression')}</div>
-                <div class="metric-sub">Dynamic atmospheric circulation classification</div>
+                <div class="metric-label">4. Synoptic Regime Classification</div>
+                <div class="metric-value" style="font-size: 1.25rem; color: #1d4ed8;">{features_dict.get('synoptic_regime', 'Monsoon Depression')}</div>
+                <div class="metric-sub">Dynamic atmospheric circulation state</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -438,28 +625,28 @@ def render_step7_features(features_dict: dict):
             f"""
             <div class="metric-card">
                 <div class="metric-label">6. Orography / Terrain Flag</div>
-                <div class="metric-value" style="font-size: 1.25rem; color: #b45309;">{features_dict.get('terrain_region', 'Western Ghats')}</div>
-                <div class="metric-sub">Topographic bias factor: <strong>{orog_risk}</strong></div>
+                <div class="metric-value" style="font-size: 1.2rem; color: #b45309;">{features_dict.get('terrain_region', 'Western Ghats')}</div>
+                <div class="metric-sub">Topographic risk factor: <strong>{orog_risk}</strong></div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
 # --------------------------------------------------------------------------
-# 4. STEP 8: Teleconnection Feature Integration (Innovation 1)
+# 6. Step 8: Global Teleconnection Feature Integration (ENSO, IOD, MJO)
 # --------------------------------------------------------------------------
 def render_step8_teleconnections(enso_val: float, iod_val: float, mjo_phase: int, mjo_amp: float):
     """
     Renders Step 8: Teleconnection Feature Integration (ENSO, IOD, MJO).
-    Highlighting why it differentiates the project beyond typical student hackathons.
+    Innovation 1 — First automated ML pipeline to explicitly encode planetary-scale climate oscillations.
     """
     st.markdown(
         """
         <div class="step-container">
             <span class="step-header-badge" style="background:#fdf2f8; color:#be185d; border-color:#fbcfe8;">INNOVATION 1 &bull; GLOBAL METEOROLOGICAL DRIVERS</span>
-            <div class="step-title">Step 8 — Teleconnection Feature Integration</div>
+            <div class="step-title">Global Teleconnection Feature Integration (ENSO, IOD, MJO)</div>
             <div class="step-desc">
-                Integrates planetary-scale climate oscillations (ENSO, IOD, MJO) sourced from NOAA. 
+                Integrates planetary-scale climate oscillations (ENSO, IOD, MJO) sourced from NOAA.
                 IMD operational forecasters manually reason with these indices; our pipeline is the first to explicitly encode them into an automated ML bust detector.
             </div>
         </div>
@@ -481,7 +668,6 @@ def render_step8_teleconnections(enso_val: float, iod_val: float, mjo_phase: int
             """,
             unsafe_allow_html=True,
         )
-
     with t2:
         iod_state = "Positive IOD (Favorable)" if iod_val > 0.4 else ("Negative IOD (Suppressed)" if iod_val < -0.4 else "Neutral IOD")
         iod_color = "#059669" if iod_val > 0.4 else ("#dc2626" if iod_val < -0.4 else "#475569")
@@ -495,9 +681,7 @@ def render_step8_teleconnections(enso_val: float, iod_val: float, mjo_phase: int
             """,
             unsafe_allow_html=True,
         )
-
     with t3:
-        # MJO Phase 2, 3, 4, 5 enhance Indian Monsoon convection; phases 6,7,8,1 suppress
         mjo_convection = "High Convective Error (Active Indian Basin)" if mjo_phase in [2, 3, 4, 5] else "Suppressed Monsoon Regime"
         st.markdown(
             f"""
@@ -510,24 +694,18 @@ def render_step8_teleconnections(enso_val: float, iod_val: float, mjo_phase: int
             unsafe_allow_html=True,
         )
 
-    # Plotly interactive Teleconnection phase-space diagram (Wheeler-Hendon RMM)
-    theta = np.linspace(0, 2 * np.pi, 9)
-    phases = ["Phase 1 (W. Hem)", "Phase 2 (IO)", "Phase 3 (IO)", "Phase 4 (MC)", "Phase 5 (MC)", "Phase 6 (WP)", "Phase 7 (WP)", "Phase 8 (WH)", "Phase 1"]
-    
-    # Calculate MJO coordinates in RMM phase space
-    angle = (mjo_phase - 1) * (2 * np.pi / 8) + np.pi/8
+    # Wheeler-Hendon RMM Phase Space diagram
+    angle = (mjo_phase - 1) * (2 * np.pi / 8) + np.pi / 8
     rmm1 = mjo_amp * np.cos(angle)
     rmm2 = mjo_amp * np.sin(angle)
 
     fig = go.Figure()
-    # Unit circle for amplitude = 1
-    t_circle = np.linspace(0, 2*np.pi, 100)
+    t_circle = np.linspace(0, 2 * np.pi, 100)
     fig.add_trace(go.Scatter(
         x=np.cos(t_circle), y=np.sin(t_circle),
         mode='lines', line=dict(color='#cbd5e1', dash='dash', width=1.5),
         name='Amp = 1.0 (Threshold)', hoverinfo='skip'
     ))
-    # Active trajectory point
     fig.add_trace(go.Scatter(
         x=[0, rmm1], y=[0, rmm2],
         mode='lines+markers',
@@ -535,22 +713,19 @@ def render_step8_teleconnections(enso_val: float, iod_val: float, mjo_phase: int
         marker=dict(size=[0, 14], color=['#6d28d9', '#dc2626'], symbol='circle'),
         name=f'Current MJO (Phase {mjo_phase}, Amp {mjo_amp:.2f})'
     ))
-
     fig.update_layout(
         title=dict(text="Wheeler-Hendon MJO Phase Space (RMM1 vs RMM2)", font=dict(color="#0f172a", size=14)),
         xaxis=dict(title="RMM1 (Maritime Continent / Pacific)", range=[-3, 3], zerolinecolor="#94a3b8", gridcolor="#f1f5f9"),
         yaxis=dict(title="RMM2 (Indian Ocean)", range=[-3, 3], zerolinecolor="#94a3b8", gridcolor="#f1f5f9"),
-        plot_bgcolor="#ffffff",
-        paper_bgcolor="#ffffff",
-        margin=dict(l=40, r=20, t=40, b=40),
-        height=280,
+        plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
+        margin=dict(l=40, r=20, t=40, b=40), height=280,
         showlegend=True,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
     st.plotly_chart(fig, width='stretch')
 
 # --------------------------------------------------------------------------
-# 5. STEP 9: Physics-Grounded Confidence Baseline (Lorenz Lyapunov)
+# 7. Step 9: Physics-Grounded Confidence Baseline (Lyapunov Divergence)
 # --------------------------------------------------------------------------
 def render_step9_lyapunov(delta_0: float, delta_t: float, lead_time_days: int):
     """
@@ -561,10 +736,10 @@ def render_step9_lyapunov(delta_0: float, delta_t: float, lead_time_days: int):
     st.markdown(
         """
         <div class="step-container">
-            <span class="step-header-badge">PHASE 4 &bull; CORE MODELING ENGINE</span>
-            <div class="step-title">Step 9 — Physics-Grounded Confidence Baseline (Lyapunov Divergence)</div>
+            <span class="step-header-badge">PHYSICS-GROUNDED CONFIDENCE BASELINE</span>
+            <div class="step-title">Local Lyapunov Exponent &amp; Predictability Horizon</div>
             <div class="step-desc">
-                Computes a local finite-time Lyapunov exponent (&lambda;) derived from the divergence between consecutive NWP runs. 
+                Computes a local finite-time Lyapunov exponent (&lambda;) derived from the divergence between consecutive NWP runs.
                 Provides an independent physics-based baseline measuring atmospheric chaos before ML inference.
             </div>
         </div>
@@ -578,17 +753,14 @@ def render_step9_lyapunov(delta_0: float, delta_t: float, lead_time_days: int):
         "Discovered exponential divergence in atmospheric states; introduced the Lyapunov exponent measuring how quickly small forecast perturbations grow."
     )
 
-    # Compute Lyapunov lambda
     eps = 1e-6
     lam = (1.0 / max(1, lead_time_days)) * np.log(abs(delta_t) / (abs(delta_0) + eps))
-    # Predictability horizon T_pred = 1 / lambda
     t_pred = 1.0 / max(0.01, lam) if lam > 0 else 14.0
-    # Physics-based confidence score %
     conf_phys = float(np.clip(np.exp(-max(0.0, lam * lead_time_days)) * 100.0, 5.0, 98.0))
 
     c1, c2, c3 = st.columns(3)
+    lam_color = "#dc2626" if lam > 0.35 else ("#d97706" if lam > 0.18 else "#16a34a")
     with c1:
-        lam_color = "#dc2626" if lam > 0.35 else ("#d97706" if lam > 0.18 else "#16a34a")
         st.markdown(
             f"""
             <div class="metric-card">
@@ -616,28 +788,26 @@ def render_step9_lyapunov(delta_0: float, delta_t: float, lead_time_days: int):
             <div class="metric-card">
                 <div class="metric-label">Predictability Horizon (1/&lambda;)</div>
                 <div class="metric-value">{t_pred:.1f} <span style="font-size:1rem; color:#64748b;">Days</span></div>
-                <div class="metric-sub">Time until initial errors overwhelm deterministic signal</div>
+                <div class="metric-sub">Time until initial errors overwhelm signal</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    # Plotly divergence trajectory over lead days 1 to 10
+    # Exponential divergence trajectory
     days = np.arange(1, 11)
     trajectory = delta_0 * np.exp(lam * days)
     critical_threshold = np.full_like(days, 5.0, dtype=float)
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(
-        x=days, y=trajectory,
-        mode='lines+markers',
+        x=days, y=trajectory, mode='lines+markers',
         name='Divergence Trajectory |Δ(t)|',
         line=dict(color=lam_color, width=3),
         marker=dict(size=8, color=lam_color)
     ))
     fig.add_trace(go.Scatter(
-        x=days, y=critical_threshold,
-        mode='lines',
+        x=days, y=critical_threshold, mode='lines',
         name='Bust Threshold (5.0 mm)',
         line=dict(color='#ef4444', dash='dash', width=2)
     ))
@@ -645,17 +815,15 @@ def render_step9_lyapunov(delta_0: float, delta_t: float, lead_time_days: int):
         title=dict(text=f"Exponential Error Growth Curve (λ = {lam:.3f} /day)", font=dict(color="#0f172a", size=14)),
         xaxis=dict(title="Lead Time (Days)", tickmode="linear", tick0=1, dtick=1, gridcolor="#f1f5f9"),
         yaxis=dict(title="Perturbation Amplitude |Δ(t)| (mm)", gridcolor="#f1f5f9"),
-        plot_bgcolor="#ffffff",
-        paper_bgcolor="#ffffff",
-        margin=dict(l=40, r=20, t=40, b=40),
-        height=260,
+        plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
+        margin=dict(l=40, r=20, t=40, b=40), height=260,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     return lam, conf_phys
 
 # --------------------------------------------------------------------------
-# 6. STEP 10: Information-Theoretic Uncertainty Measure (Shannon Entropy)
+# 8. Step 10: Information-Theoretic Uncertainty Measure (Shannon Entropy)
 # --------------------------------------------------------------------------
 def render_step10_entropy(ensemble_samples: np.ndarray, conf_phys: float):
     """
@@ -666,10 +834,10 @@ def render_step10_entropy(ensemble_samples: np.ndarray, conf_phys: float):
     st.markdown(
         """
         <div class="step-container">
-            <span class="step-header-badge">PHASE 4 &bull; INFORMATION THEORY</span>
-            <div class="step-title">Step 10 — Information-Theoretic Uncertainty Measure</div>
+            <span class="step-header-badge">INFORMATION-THEORETIC UNCERTAINTY</span>
+            <div class="step-title">Shannon Entropy &amp; Dual-Grounded Confidence Score</div>
             <div class="step-desc">
-                Computes the Shannon entropy of the forecast's predictive distribution. Combined with Step 9's Lyapunov physics signal 
+                Computes the Shannon entropy of the forecast's predictive distribution. Combined with the Lyapunov physics signal
                 to construct a <strong>dual-grounded confidence score</strong> rooted in dynamical systems and information theory.
             </div>
         </div>
@@ -680,20 +848,17 @@ def render_step10_entropy(ensemble_samples: np.ndarray, conf_phys: float):
     render_grounding(
         "Claude Shannon (Bell Labs, 1948)",
         "Information Entropy H(X) = -&sum; p(x) log<sub>2</sub> p(x)",
-        "The founder of information theory. Formalized entropy as an objective measure of uncertainty in probability distributions."
+        "The founder of information theory. Formalized entropy as an objective measure of uncertainty in probability distributions — directly quantifying forecast sharpness."
     )
 
-    # Compute histogram & Shannon entropy
     hist, bin_edges = np.histogram(ensemble_samples, bins=15, density=True)
     bin_widths = np.diff(bin_edges)
     probs = hist * bin_widths
-    probs = probs[probs > 1e-9]  # non-zero
+    probs = probs[probs > 1e-9]
     shannon_entropy = -np.sum(probs * np.log2(probs))
-    max_entropy = np.log2(15)  # uniform distribution on 15 bins
+    max_entropy = np.log2(15)
     norm_entropy = float(np.clip(shannon_entropy / max_entropy, 0.0, 1.0))
     info_conf = (1.0 - norm_entropy) * 100.0
-
-    # Dual-grounded confidence score (50% physics, 50% info theory)
     dual_confidence = 0.5 * conf_phys + 0.5 * info_conf
 
     e1, e2, e3 = st.columns(3)
@@ -732,47 +897,38 @@ def render_step10_entropy(ensemble_samples: np.ndarray, conf_phys: float):
             unsafe_allow_html=True,
         )
 
-    # Plotly distribution density curve
+    from scipy.stats import gaussian_kde
     fig = go.Figure()
     fig.add_trace(go.Histogram(
-        x=ensemble_samples,
-        histnorm='probability density',
-        nbinsx=15,
+        x=ensemble_samples, histnorm='probability density', nbinsx=15,
         name='Ensemble Predictive PDF',
         marker=dict(color='#bfdbfe', line=dict(color='#2563eb', width=1.5)),
         opacity=0.8
     ))
-    
-    # Kernel density fit curve
-    from scipy.stats import gaussian_kde
     kde = gaussian_kde(ensemble_samples)
-    x_grid = np.linspace(min(ensemble_samples)-2, max(ensemble_samples)+2, 150)
+    x_grid = np.linspace(min(ensemble_samples) - 2, max(ensemble_samples) + 2, 150)
     fig.add_trace(go.Scatter(
-        x=x_grid, y=kde(x_grid),
-        mode='lines',
+        x=x_grid, y=kde(x_grid), mode='lines',
         name='KDE Density Fit',
         line=dict(color='#1d4ed8', width=2.5)
     ))
-
     fig.update_layout(
         title=dict(text=f"Predictive Ensemble Distribution & Entropy Sharpness (H = {shannon_entropy:.2f} bits)", font=dict(color="#0f172a", size=14)),
         xaxis=dict(title="Precipitation Forecast Value (mm)", gridcolor="#f1f5f9"),
         yaxis=dict(title="Probability Density", gridcolor="#f1f5f9"),
-        plot_bgcolor="#ffffff",
-        paper_bgcolor="#ffffff",
-        margin=dict(l=40, r=20, t=40, b=40),
-        height=260,
+        plot_bgcolor="#ffffff", paper_bgcolor="#ffffff",
+        margin=dict(l=40, r=20, t=40, b=40), height=260,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     return dual_confidence
 
 # --------------------------------------------------------------------------
-# 7. STEP 13: Calibrated Uncertainty Quantification (Conformal Prediction)
+# 9. Calibrated Uncertainty Quantification (Conformal Prediction)
 # --------------------------------------------------------------------------
 def render_step13_conformal(pred_error: float, q_val: float, alpha: float = 0.10):
     """
-    Renders Step 13: Conformal Prediction.
+    Renders Conformal Prediction.
     C(x) = [f(x) - q, f(x) + q] where q is (1-alpha) quantile of nonconformity scores.
     Grounding: Norbert Wiener (Cybernetics / Prediction Theory).
     """
@@ -783,11 +939,11 @@ def render_step13_conformal(pred_error: float, q_val: float, alpha: float = 0.10
     st.markdown(
         f"""
         <div class="step-container">
-            <span class="step-header-badge">PHASE 4 &bull; STATISTICAL RIGOR</span>
-            <div class="step-title">Step 13 — Calibrated Uncertainty Quantification (Conformal Prediction)</div>
+            <span class="step-header-badge">STATISTICAL UNCERTAINTY QUANTIFICATION</span>
+            <div class="step-title">Calibrated Conformal Prediction Intervals</div>
             <div class="step-desc">
-                Replaces unverified point predictions with <strong>statistically valid Conformal Prediction intervals</strong> 
-                guaranteeing {coverage_pct}% marginal coverage regardless of underlying data distribution.
+                Replaces arbitrary confidence heuristics with <strong>distribution-free Conformal Prediction</strong> (using MAPIE), 
+                producing mathematically guaranteed coverage intervals: <span class="code-chip">C(X) = [&fnof;(X) - q<sub>1-&alpha;</sub>, &fnof;(X) + q<sub>1-&alpha;</sub>]</span>.
             </div>
         </div>
         """,
@@ -797,7 +953,7 @@ def render_step13_conformal(pred_error: float, q_val: float, alpha: float = 0.10
     render_grounding(
         "Norbert Wiener (MIT, 1948)",
         "Cybernetics & Modern Prediction Theory",
-        "Pioneered rigorous mathematical prediction under stochastic noise (Wiener filter). Conformal prediction is the modern distribution-free realization of this framework."
+        "Pioneered rigorous mathematical prediction under stochastic noise (Wiener filter). Conformal prediction is the modern distribution-free realization of this prediction-under-uncertainty tradition."
     )
 
     c1, c2, c3 = st.columns(3)
@@ -805,9 +961,9 @@ def render_step13_conformal(pred_error: float, q_val: float, alpha: float = 0.10
         st.markdown(
             f"""
             <div class="metric-card">
-                <div class="metric-label">Predicted Error Magnitude</div>
+                <div class="metric-label">Predicted Error Magnitude &fnof;(X)</div>
                 <div class="metric-value">{pred_error:.2f} <span style="font-size:1rem; color:#64748b;">mm</span></div>
-                <div class="metric-sub">Point prediction &fnof;(x)</div>
+                <div class="metric-sub">Point error regression estimate</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -818,7 +974,7 @@ def render_step13_conformal(pred_error: float, q_val: float, alpha: float = 0.10
             <div class="metric-card">
                 <div class="metric-label">Conformal Quantile (q<sub>1-&alpha;</sub>)</div>
                 <div class="metric-value" style="color:#2563eb;">&plusmn;{q_val:.2f} <span style="font-size:1rem; color:#64748b;">mm</span></div>
-                <div class="metric-sub">Calibration Non-conformity Quantile (&alpha;={alpha})</div>
+                <div class="metric-sub">Calibration Non-conformity Quantile (&alpha;={alpha:.2f})</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -836,21 +992,21 @@ def render_step13_conformal(pred_error: float, q_val: float, alpha: float = 0.10
         )
 
 # --------------------------------------------------------------------------
-# 8. STEP 14: Adaptive / Online Conformal Prediction (Innovation 2)
+# 7. Adaptive / Online Conformal Prediction (ACI)
 # --------------------------------------------------------------------------
 def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: float = 0.90):
     """
-    Renders Step 14: Adaptive / Online Conformal Prediction (Innovation 2).
+    Renders Adaptive / Online Conformal Prediction (ACI).
     Continuous recalibration without full model retraining as weather regimes shift (monsoon vs winter).
     """
     st.markdown(
         """
         <div class="step-container">
-            <span class="step-header-badge" style="background:#ecfdf5; color:#047857; border-color:#a7f3d0;">INNOVATION 2 &bull; NON-STATIONARY ADAPTATION</span>
-            <div class="step-title">Step 14 — Adaptive / Online Conformal Prediction (ACI)</div>
+            <span class="step-header-badge" style="background:#ecfdf5; color:#047857; border-color:#a7f3d0;">ONLINE NON-STATIONARY ADAPTATION</span>
+            <div class="step-title">Adaptive Conformal Inference (ACI) for Dynamic Regimes</div>
             <div class="step-desc">
                 Extends conformal prediction using Gibbs &amp; Cand&egrave;s Adaptive Conformal Inference (2023&ndash;2024 literature). 
-                Dynamically updates the error quantile <span class="code-chip">q<sub>t+1</sub> = q<sub>t</sub> + &gamma;(&alpha; - err<sub>t</sub>)</span> 
+                Dynamically updates the nonconformity quantile <span class="code-chip">q<sub>t+1</sub> = q<sub>t</sub> + &gamma;(&alpha; - err<sub>t</sub>)</span> 
                 as new daily observations stream in, ensuring valid coverage during abrupt monsoon-to-winter regime transitions without retraining.
             </div>
         </div>
@@ -867,18 +1023,18 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
     records = []
     q_curr = 1.8
     for t in range(1, time_steps + 1):
-        # Injected regime shift at day 15 (e.g. Monsoon onset -> higher error variance)
+        # Injected regime shift at day 15 (Monsoon onset -> higher error variance)
         var_scale = 1.0 if t < 15 else 2.2
         true_err = abs(np.random.normal(loc=2.0 if t < 15 else 3.8, scale=0.8 * var_scale))
         pred_err = 2.0 if t < 15 else 2.5
         
-        # Conformal interval
+        # Conformal interval check
         covered = (abs(true_err - pred_err) <= q_curr)
         err_indicator = 0 if covered else 1
         
         # Adaptive update: alpha_t+1 = alpha_t + gamma * (alpha - err_indicator)
         alpha_t = np.clip(alpha_t + gamma * (alpha - err_indicator), 0.01, 0.5)
-        # Adapt q_curr accordingly
+        # Adapt q_curr
         q_curr = max(0.5, q_curr + 0.15 * (1 if not covered else -0.05))
         
         records.append({
@@ -886,11 +1042,10 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
             "Regime": "Pre-Monsoon" if t < 15 else "Active Monsoon Surge",
             "True_Error": true_err,
             "Predicted_Error": pred_err,
-            "Conformal_Half_Width_q": q_curr,
             "Lower_Bound": max(0.0, pred_err - q_curr),
             "Upper_Bound": pred_err + q_curr,
             "Covered": covered,
-            "Coverage_Rolling": 0.0  # computed next
+            "Coverage_Rolling": 0.0
         })
 
     df_online = pd.DataFrame(records)
@@ -905,7 +1060,7 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
             <div class="metric-card">
                 <div class="metric-label">Online Empirical Coverage</div>
                 <div class="metric-value" style="color: {cov_color};">{current_cov:.1f}%</div>
-                <div class="metric-sub">Nominal Target Guarantee: <strong>{nominal_coverage*100:.0f}%</strong></div>
+                <div class="metric-sub">Nominal Target: <strong>{nominal_coverage*100:.0f}%</strong></div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -916,7 +1071,7 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
             <div class="metric-card">
                 <div class="metric-label">Adaptation Step Size (&gamma;)</div>
                 <div class="metric-value">0.050</div>
-                <div class="metric-sub">Gibbs &amp; Cand&egrave;s ACI learning rate</div>
+                <div class="metric-sub">Gibbs &amp; Cand&egrave;s ACI rate</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -926,8 +1081,8 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
             f"""
             <div class="metric-card">
                 <div class="metric-label">Seasonal Recalibration Status</div>
-                <div class="metric-value" style="font-size:1.3rem; color:#2563eb;">ACTIVE (Zero Retrain)</div>
-                <div class="metric-sub">Real-time daily residual stream tracking</div>
+                <div class="metric-value" style="font-size:1.25rem; color:#2563eb;">ACTIVE (Zero Retrain)</div>
+                <div class="metric-sub">Real-time daily streaming residual tracking</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -935,8 +1090,6 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
 
     # Plotly Online Coverage and Interval Tracking
     fig = go.Figure()
-    
-    # Upper and lower conformal envelope
     fig.add_trace(go.Scatter(
         x=df_online["Day"], y=df_online["Upper_Bound"],
         mode='lines', line=dict(width=0), showlegend=False, hoverinfo='skip'
@@ -946,8 +1099,6 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
         mode='lines', line=dict(width=0), fill='tonexty',
         fillcolor='rgba(37, 99, 235, 0.12)', name=f'Adaptive {int(nominal_coverage*100)}% Conformal Band'
     ))
-    
-    # True Observed Errors
     fig.add_trace(go.Scatter(
         x=df_online["Day"], y=df_online["True_Error"],
         mode='markers+lines',
@@ -955,8 +1106,6 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
         marker=dict(size=6, color=np.where(df_online["Covered"], '#2563eb', '#dc2626')),
         name='Actual Error Observed'
     ))
-    
-    # Regime shift divider
     fig.add_vline(x=14.5, line_width=1.5, line_dash="dash", line_color="#d97706",
                   annotation_text="Monsoon Regime Shift (Day 15)", annotation_position="top left",
                   annotation_font=dict(size=11, color="#b45309"))
@@ -971,75 +1120,61 @@ def render_step14_adaptive_conformal(time_steps: int = 30, nominal_coverage: flo
         height=280,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 # --------------------------------------------------------------------------
-# 9. India Geospatial Risk Map Visualizer
-# --------------------------------------------------------------------------
-# 9. India Geospatial Risk Map Visualizer (Matching Outline Map with States & UTs)
+# 8. India Geospatial Risk Map Visualizer
 # --------------------------------------------------------------------------
 def render_india_risk_map(selected_region: str):
     """
-    Renders the exact India Outline Map with States & Union Territories
-    matching the user's reference map: sky-blue ocean, clean white land, dashed state borders,
-    water labels (Arabian Sea, Bay of Bengal, Indian Ocean), north arrow, and border legend.
+    Renders the India Outline Map with States & Union Territories
+    matching sky-blue ocean, clean white land, water labels, and regional bust risks.
     """
-    # Comprehensive meteorological risk database across Indian States & UTs
     states_data = [
-        # Northern States & UTs
-        {"name": "Jammu & Kashmir", "category": "UT", "lat": 33.7782, "lon": 76.5762, "terrain": "Himalayan Ridge / Western Disturbance", "bust_prob": 0.74, "lyapunov": 0.39, "entropy": 3.35, "error_mm": 6.2, "region_group": "Himalayan"},
-        {"name": "Ladakh", "category": "UT", "lat": 34.1526, "lon": 77.5771, "terrain": "High-Altitude Cold Desert", "bust_prob": 0.31, "lyapunov": 0.14, "entropy": 1.95, "error_mm": 2.1, "region_group": "Himalayan"},
-        {"name": "Himachal Pradesh", "category": "State", "lat": 31.1048, "lon": 77.1734, "terrain": "Steep Orography / Cloudburst Prone", "bust_prob": 0.70, "lyapunov": 0.37, "entropy": 3.18, "error_mm": 5.8, "region_group": "Himalayan"},
-        {"name": "Uttarakhand", "category": "State", "lat": 30.0668, "lon": 79.0193, "terrain": "Foothill Orographic Shear", "bust_prob": 0.76, "lyapunov": 0.41, "entropy": 3.42, "error_mm": 6.5, "region_group": "Himalayan Foothills (Uttarakhand)"},
-        {"name": "Punjab", "category": "State", "lat": 31.1471, "lon": 75.3412, "terrain": "Agricultural Plains", "bust_prob": 0.32, "lyapunov": 0.15, "entropy": 1.88, "error_mm": 2.3, "region_group": "Indo-Gangetic"},
-        {"name": "Haryana & Delhi", "category": "State/UT", "lat": 28.6139, "lon": 77.2090, "terrain": "Plains / Urban Convective Island", "bust_prob": 0.38, "lyapunov": 0.18, "entropy": 2.10, "error_mm": 2.8, "region_group": "Indo-Gangetic Plain (Delhi NCR)"},
-        
-        # Western & Central
-        {"name": "Rajasthan", "category": "State", "lat": 27.0238, "lon": 74.2179, "terrain": "Thar Arid / Heatwave Axis", "bust_prob": 0.22, "lyapunov": 0.11, "entropy": 1.65, "error_mm": 1.4, "region_group": "Northwest Arid (Jodhpur / Thar)"},
-        {"name": "Gujarat", "category": "State", "lat": 22.2587, "lon": 71.1924, "terrain": "Coastal Lowland / Arabian Sea Cyclones", "bust_prob": 0.58, "lyapunov": 0.29, "entropy": 2.92, "error_mm": 4.6, "region_group": "West Coast"},
-        {"name": "Maharashtra (Western Ghats)", "category": "State", "lat": 17.9237, "lon": 73.6586, "terrain": "Complex Escarpment (Mahabaleshwar)", "bust_prob": 0.82, "lyapunov": 0.46, "entropy": 3.65, "error_mm": 7.8, "region_group": "Western Ghats (Mahabaleshwar/Goa)"},
-        {"name": "Maharashtra (Mumbai Suburban)", "category": "State", "lat": 19.0760, "lon": 72.8777, "terrain": "Coastal Orographic Convergence", "bust_prob": 0.69, "lyapunov": 0.34, "entropy": 3.15, "error_mm": 5.4, "region_group": "West Coast (Mumbai Suburban)"},
-        {"name": "Goa", "category": "State", "lat": 15.2993, "lon": 74.1240, "terrain": "Coastal Ghats Margin", "bust_prob": 0.73, "lyapunov": 0.38, "entropy": 3.25, "error_mm": 6.1, "region_group": "Western Ghats (Mahabaleshwar/Goa)"},
-        {"name": "Madhya Pradesh", "category": "State", "lat": 22.9734, "lon": 78.6569, "terrain": "Central Plateau / Monsoon Low Track", "bust_prob": 0.45, "lyapunov": 0.22, "entropy": 2.45, "error_mm": 3.5, "region_group": "Central India (Nagpur / MP)"},
-        {"name": "Chhattisgarh", "category": "State", "lat": 21.2787, "lon": 81.8661, "terrain": "Mahanadi Basin / Convective Core", "bust_prob": 0.53, "lyapunov": 0.27, "entropy": 2.78, "error_mm": 4.2, "region_group": "Central India"},
-        
-        # Eastern & North-Eastern
-        {"name": "Uttar Pradesh", "category": "State", "lat": 26.8467, "lon": 80.9462, "terrain": "Gangetic Moisture Trough", "bust_prob": 0.42, "lyapunov": 0.20, "entropy": 2.30, "error_mm": 3.1, "region_group": "Indo-Gangetic"},
-        {"name": "Bihar", "category": "State", "lat": 25.0961, "lon": 85.3131, "terrain": "Floodplain / Monsoon Trough Axis", "bust_prob": 0.56, "lyapunov": 0.28, "entropy": 2.85, "error_mm": 4.4, "region_group": "Indo-Gangetic"},
-        {"name": "Jharkhand", "category": "State", "lat": 23.6102, "lon": 85.2799, "terrain": "Chota Nagpur Plateau", "bust_prob": 0.49, "lyapunov": 0.24, "entropy": 2.60, "error_mm": 3.8, "region_group": "Central India"},
-        {"name": "West Bengal", "category": "State", "lat": 22.9868, "lon": 87.8550, "terrain": "Gangetic Delta / Kalbaisakhi Shear", "bust_prob": 0.61, "lyapunov": 0.31, "entropy": 3.05, "error_mm": 4.9, "region_group": "East Coast"},
-        {"name": "Odisha", "category": "State", "lat": 20.9517, "lon": 85.0985, "terrain": "Bay of Bengal Cyclone Landfall", "bust_prob": 0.67, "lyapunov": 0.35, "entropy": 3.20, "error_mm": 5.5, "region_group": "East Coast"},
-        {"name": "Meghalaya (Cherrapunji)", "category": "State", "lat": 25.2700, "lon": 91.7300, "terrain": "Funnel Orography (Extreme Rain)", "bust_prob": 0.85, "lyapunov": 0.48, "entropy": 3.75, "error_mm": 8.5, "region_group": "Northeast India (Cherrapunji/Assam)"},
-        {"name": "Assam", "category": "State", "lat": 26.2006, "lon": 92.9376, "terrain": "Brahmaputra Valley Convective Basin", "bust_prob": 0.77, "lyapunov": 0.42, "entropy": 3.48, "error_mm": 6.8, "region_group": "Northeast India (Cherrapunji/Assam)"},
-        {"name": "Arunachal Pradesh", "category": "State", "lat": 28.2180, "lon": 94.7278, "terrain": "Eastern Himalayan Escarpment", "bust_prob": 0.75, "lyapunov": 0.40, "entropy": 3.38, "error_mm": 6.4, "region_group": "Himalayan"},
-        {"name": "Nagaland, Manipur & Mizoram", "category": "States", "lat": 24.6637, "lon": 93.9063, "terrain": "Patkai / Lushai Hills", "bust_prob": 0.64, "lyapunov": 0.32, "entropy": 3.02, "error_mm": 5.1, "region_group": "Northeast"},
-        {"name": "Tripura", "category": "State", "lat": 23.9408, "lon": 91.9882, "terrain": "Lowland Convective Funnel", "bust_prob": 0.59, "lyapunov": 0.30, "entropy": 2.90, "error_mm": 4.7, "region_group": "Northeast"},
-        {"name": "Sikkim", "category": "State", "lat": 27.5330, "lon": 88.5122, "terrain": "High Mountain Ridge", "bust_prob": 0.71, "lyapunov": 0.37, "entropy": 3.22, "error_mm": 5.9, "region_group": "Himalayan"},
-        
-        # Southern States & UTs
-        {"name": "Karnataka", "category": "State", "lat": 15.3173, "lon": 75.7139, "terrain": "Windward / Leeward Ghats Split", "bust_prob": 0.63, "lyapunov": 0.33, "entropy": 3.10, "error_mm": 5.0, "region_group": "Western Ghats"},
-        {"name": "Telangana", "category": "State", "lat": 17.8749, "lon": 78.1809, "terrain": "Semi-Arid Deccan Plateau", "bust_prob": 0.44, "lyapunov": 0.21, "entropy": 2.40, "error_mm": 3.4, "region_group": "South Peninsula"},
-        {"name": "Andhra Pradesh", "category": "State", "lat": 15.9129, "lon": 79.7400, "terrain": "East Coast Marine Boundary", "bust_prob": 0.55, "lyapunov": 0.28, "entropy": 2.82, "error_mm": 4.3, "region_group": "South Peninsula"},
-        {"name": "Kerala", "category": "State", "lat": 10.8505, "lon": 76.2711, "terrain": "Monsoon Gateway / Ghats Barrier", "bust_prob": 0.79, "lyapunov": 0.43, "entropy": 3.52, "error_mm": 7.1, "region_group": "Western Ghats"},
-        {"name": "Tamil Nadu", "category": "State", "lat": 11.1271, "lon": 78.6569, "terrain": "Northeast Monsoon / Rain Shadow", "bust_prob": 0.52, "lyapunov": 0.26, "entropy": 2.80, "error_mm": 4.1, "region_group": "South Peninsula (Chennai Coastal)"},
-        {"name": "Lakshadweep Islands", "category": "UT", "lat": 10.5667, "lon": 72.6417, "terrain": "Arabian Sea Coral Atolls", "bust_prob": 0.48, "lyapunov": 0.25, "entropy": 2.65, "error_mm": 3.9, "region_group": "Island UT"},
-        {"name": "Andaman & Nicobar Islands", "category": "UT", "lat": 11.6670, "lon": 92.7358, "terrain": "Bay of Bengal Tropical Archipelago", "bust_prob": 0.66, "lyapunov": 0.34, "entropy": 3.16, "error_mm": 5.3, "region_group": "Island UT"}
+        {"name": "Jammu & Kashmir", "category": "UT", "lat": 33.7782, "lon": 76.5762, "terrain": "Himalayan Ridge / Western Disturbance", "bust_prob": 0.74, "error_mm": 6.2, "region_group": "Himalayan"},
+        {"name": "Ladakh", "category": "UT", "lat": 34.1526, "lon": 77.5771, "terrain": "High-Altitude Cold Desert", "bust_prob": 0.31, "error_mm": 2.1, "region_group": "Himalayan"},
+        {"name": "Himachal Pradesh", "category": "State", "lat": 31.1048, "lon": 77.1734, "terrain": "Steep Orography / Cloudburst Prone", "bust_prob": 0.70, "error_mm": 5.8, "region_group": "Himalayan"},
+        {"name": "Uttarakhand", "category": "State", "lat": 30.0668, "lon": 79.0193, "terrain": "Foothill Orographic Shear", "bust_prob": 0.76, "error_mm": 6.5, "region_group": "Himalayan Foothills (Uttarakhand)"},
+        {"name": "Punjab", "category": "State", "lat": 31.1471, "lon": 75.3412, "terrain": "Agricultural Plains", "bust_prob": 0.32, "error_mm": 2.3, "region_group": "Indo-Gangetic"},
+        {"name": "Haryana & Delhi", "category": "State/UT", "lat": 28.6139, "lon": 77.2090, "terrain": "Plains / Urban Convective Island", "bust_prob": 0.38, "error_mm": 2.8, "region_group": "Indo-Gangetic Plain (Delhi NCR)"},
+        {"name": "Rajasthan", "category": "State", "lat": 27.0238, "lon": 74.2179, "terrain": "Thar Arid / Heatwave Axis", "bust_prob": 0.22, "error_mm": 1.4, "region_group": "Northwest Arid (Jodhpur / Thar)"},
+        {"name": "Gujarat", "category": "State", "lat": 22.2587, "lon": 71.1924, "terrain": "Coastal Lowland / Arabian Sea Cyclones", "bust_prob": 0.58, "error_mm": 4.6, "region_group": "West Coast"},
+        {"name": "Maharashtra (Western Ghats)", "category": "State", "lat": 17.9237, "lon": 73.6586, "terrain": "Complex Escarpment (Mahabaleshwar)", "bust_prob": 0.82, "error_mm": 7.8, "region_group": "Western Ghats (Mahabaleshwar/Goa)"},
+        {"name": "Maharashtra (Mumbai Suburban)", "category": "State", "lat": 19.0760, "lon": 72.8777, "terrain": "Coastal Orographic Convergence", "bust_prob": 0.69, "error_mm": 5.4, "region_group": "West Coast (Mumbai Suburban)"},
+        {"name": "Goa", "category": "State", "lat": 15.2993, "lon": 74.1240, "terrain": "Coastal Ghats Margin", "bust_prob": 0.73, "error_mm": 6.1, "region_group": "Western Ghats (Mahabaleshwar/Goa)"},
+        {"name": "Madhya Pradesh", "category": "State", "lat": 22.9734, "lon": 78.6569, "terrain": "Central Plateau / Monsoon Low Track", "bust_prob": 0.45, "error_mm": 3.5, "region_group": "Central India (Nagpur / MP)"},
+        {"name": "Chhattisgarh", "category": "State", "lat": 21.2787, "lon": 81.8661, "terrain": "Mahanadi Basin / Convective Core", "bust_prob": 0.53, "error_mm": 4.2, "region_group": "Central India"},
+        {"name": "Uttar Pradesh", "category": "State", "lat": 26.8467, "lon": 80.9462, "terrain": "Gangetic Moisture Trough", "bust_prob": 0.42, "error_mm": 3.1, "region_group": "Indo-Gangetic"},
+        {"name": "Bihar", "category": "State", "lat": 25.0961, "lon": 85.3131, "terrain": "Floodplain / Monsoon Trough Axis", "bust_prob": 0.56, "error_mm": 4.4, "region_group": "Indo-Gangetic"},
+        {"name": "Jharkhand", "category": "State", "lat": 23.6102, "lon": 85.2799, "terrain": "Chota Nagpur Plateau", "bust_prob": 0.49, "error_mm": 3.8, "region_group": "Central India"},
+        {"name": "West Bengal", "category": "State", "lat": 22.9868, "lon": 87.8550, "terrain": "Gangetic Delta / Kalbaisakhi Shear", "bust_prob": 0.61, "error_mm": 4.9, "region_group": "East Coast"},
+        {"name": "Odisha", "category": "State", "lat": 20.9517, "lon": 85.0985, "terrain": "Bay of Bengal Cyclone Landfall", "bust_prob": 0.67, "error_mm": 5.5, "region_group": "East Coast"},
+        {"name": "Meghalaya (Cherrapunji)", "category": "State", "lat": 25.2700, "lon": 91.7300, "terrain": "Funnel Orography (Extreme Rain)", "bust_prob": 0.85, "error_mm": 8.5, "region_group": "Northeast India (Cherrapunji/Assam)"},
+        {"name": "Assam", "category": "State", "lat": 26.2006, "lon": 92.9376, "terrain": "Brahmaputra Valley Convective Basin", "bust_prob": 0.77, "error_mm": 6.8, "region_group": "Northeast India (Cherrapunji/Assam)"},
+        {"name": "Arunachal Pradesh", "category": "State", "lat": 28.2180, "lon": 94.7278, "terrain": "Eastern Himalayan Escarpment", "bust_prob": 0.75, "error_mm": 6.4, "region_group": "Himalayan"},
+        {"name": "Nagaland, Manipur & Mizoram", "category": "States", "lat": 24.6637, "lon": 93.9063, "terrain": "Patkai / Lushai Hills", "bust_prob": 0.64, "error_mm": 5.1, "region_group": "Northeast"},
+        {"name": "Tripura", "category": "State", "lat": 23.9408, "lon": 91.9882, "terrain": "Lowland Convective Funnel", "bust_prob": 0.59, "error_mm": 4.7, "region_group": "Northeast"},
+        {"name": "Sikkim", "category": "State", "lat": 27.5330, "lon": 88.5122, "terrain": "High Mountain Ridge", "bust_prob": 0.71, "error_mm": 5.9, "region_group": "Himalayan"},
+        {"name": "Karnataka", "category": "State", "lat": 15.3173, "lon": 75.7139, "terrain": "Windward / Leeward Ghats Split", "bust_prob": 0.63, "error_mm": 5.0, "region_group": "Western Ghats"},
+        {"name": "Telangana", "category": "State", "lat": 17.8749, "lon": 78.1809, "terrain": "Semi-Arid Deccan Plateau", "bust_prob": 0.44, "error_mm": 3.4, "region_group": "South Peninsula"},
+        {"name": "Andhra Pradesh", "category": "State", "lat": 15.9129, "lon": 79.7400, "terrain": "East Coast Marine Boundary", "bust_prob": 0.55, "error_mm": 4.3, "region_group": "South Peninsula"},
+        {"name": "Kerala", "category": "State", "lat": 10.8505, "lon": 76.2711, "terrain": "Monsoon Gateway / Ghats Barrier", "bust_prob": 0.79, "error_mm": 7.1, "region_group": "Western Ghats"},
+        {"name": "Tamil Nadu", "category": "State", "lat": 11.1271, "lon": 78.6569, "terrain": "Northeast Monsoon / Rain Shadow", "bust_prob": 0.52, "error_mm": 4.1, "region_group": "South Peninsula (Chennai Coastal)"},
+        {"name": "Lakshadweep Islands", "category": "UT", "lat": 10.5667, "lon": 72.6417, "terrain": "Arabian Sea Coral Atolls", "bust_prob": 0.48, "error_mm": 3.9, "region_group": "Island UT"},
+        {"name": "Andaman & Nicobar Islands", "category": "UT", "lat": 11.6670, "lon": 92.7358, "terrain": "Bay of Bengal Tropical Archipelago", "bust_prob": 0.66, "error_mm": 5.3, "region_group": "Island UT"}
     ]
     df_map = pd.DataFrame(states_data)
 
-    # Calculate dynamic risk category
     df_map["Risk_Level"] = df_map["bust_prob"].apply(
         lambda p: "High Bust Risk (>=60%)" if p >= 0.60 else ("Moderate Uncertainty (35-60%)" if p >= 0.35 else "Stable Forecast (<35%)")
     )
 
-    # Highlight active target
     matched = df_map[df_map["region_group"].str.contains(selected_region.split(" (")[0], case=False, na=False)]
     if matched.empty:
         matched = df_map[df_map["name"].str.contains(selected_region.split(" (")[0], case=False, na=False)]
     
     active_state = matched.iloc[0] if not matched.empty else df_map.iloc[8]
 
-    # Map container header styled exactly like the outline map in user reference image
     st.markdown(
         """
         <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);">
@@ -1067,7 +1202,6 @@ def render_india_risk_map(selected_region: str):
         unsafe_allow_html=True,
     )
 
-    # Create Plotly Geo Map with authentic sky-blue ocean and white landmass
     fig = px.scatter_geo(
         df_map,
         lat="lat",
@@ -1078,8 +1212,6 @@ def render_india_risk_map(selected_region: str):
         hover_data={
             "bust_prob": ":.1%",
             "error_mm": ":.2f mm",
-            "lyapunov": ":.3f",
-            "entropy": ":.2f bits",
             "terrain": True,
             "category": True,
             "lat": False,
@@ -1095,7 +1227,6 @@ def render_india_risk_map(selected_region: str):
         center={"lat": 22.0, "lon": 82.5}
     )
 
-    # Highlight active selected region with distinct pulsing circle marker
     fig.add_trace(go.Scattergeo(
         lat=[active_state["lat"]],
         lon=[active_state["lon"]],
@@ -1112,7 +1243,6 @@ def render_india_risk_map(selected_region: str):
         hoverinfo="skip"
     ))
 
-    # Exact Sky-Blue Ocean and Clean White Land styling matching the reference image
     fig.update_geos(
         fitbounds="locations",
         visible=True,
@@ -1129,7 +1259,7 @@ def render_india_risk_map(selected_region: str):
         showland=True,
         landcolor="#ffffff",
         showocean=True,
-        oceancolor="#60bcf8",  # Exact ocean blue from the outline map
+        oceancolor="#60bcf8",
         showlakes=True,
         lakecolor="#60bcf8",
         showrivers=True,
@@ -1137,7 +1267,6 @@ def render_india_risk_map(selected_region: str):
         bgcolor="#60bcf8"
     )
 
-    # Text annotations matching the reference map: Arabian Sea, Bay of Bengal, Indian Ocean, Legend
     fig.add_annotation(
         x=0.14, y=0.45, xref="paper", yref="paper",
         text="<b><i>A R A B I A N<br>S E A</i></b>",
@@ -1178,9 +1307,8 @@ def render_india_risk_map(selected_region: str):
         )
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
-    # Bottom Legend & Map metadata card matching the reference outline map
     st.markdown(
         """
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 16px; margin-top: -6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: #475569; flex-wrap: wrap; gap: 10px;">
@@ -1204,3 +1332,65 @@ def render_india_risk_map(selected_region: str):
     )
     return df_map
 
+# --------------------------------------------------------------------------
+# 9. GitHub Repository Integration Page
+# --------------------------------------------------------------------------
+def render_github_repo_view():
+    """Renders direct repository integration card and links to https://github.com/Preeti112007/sihdemo."""
+    st.markdown(
+        f"""
+        <div class="step-container">
+            <span class="step-header-badge" style="background:#0f172a; color:#ffffff; border-color:#0f172a;">SOURCE CODE REPOSITORY</span>
+            <div class="step-title">Project Codebase: Preeti112007 / sihdemo</div>
+            <div class="step-desc">
+                Official repository for Smart India Hackathon (SIH) Forecast Bust Detection Pipeline.
+            </div>
+        </div>
+
+        <div style="background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <div style="font-size: 1.25rem; font-weight: 800; color: #0f172a;">
+                        📦 <a href="{GITHUB_REPO_URL}" target="_blank" style="color: #1d4ed8; text-decoration: none;">https://github.com/Preeti112007/sihdemo</a>
+                    </div>
+                    <div style="font-size: 0.9rem; color: #475569; margin-top: 6px;">
+                        Contains data ingestion scripts (ERA5 / GFS Open-Meteo), paired error database generation, feature engineering pipelines, and conformal prediction modules.
+                    </div>
+                </div>
+                <div>
+                    <a href="{GITHUB_REPO_URL}" target="_blank" style="text-decoration: none;">
+                        <button style="background: #2563eb; color: #ffffff; font-weight: 700; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                            Open GitHub Repo ↗
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <hr style="margin: 16px 0; border-color: #e2e8f0;">
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Core Files</div>
+                    <ul style="margin: 8px 0 0 16px; padding: 0; font-size: 0.88rem; color: #334155;">
+                        <li><span class="code-chip">app.py</span> — Master Streamlit application</li>
+                        <li><span class="code-chip">frontend.py</span> — Strict light UI &amp; visualizers</li>
+                        <li><span class="code-chip">download.py</span> — Live GFS + ERA5 downloader</li>
+                        <li><span class="code-chip">build_error_db.py</span> — Paired error database builder</li>
+                        <li><span class="code-chip">step13_calibrated.py</span> — MAPIE conformal prediction</li>
+                    </ul>
+                </div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Pipeline Capabilities</div>
+                    <ul style="margin: 8px 0 0 16px; padding: 0; font-size: 0.88rem; color: #334155;">
+                        <li>Foundation &amp; Atmospheric Physics Grounding</li>
+                        <li>Ground Truth, GFS Telemetry &amp; Benchmark DB</li>
+                        <li>Meteorological Feature Engineering (6 Groups)</li>
+                        <li>Calibrated Conformal Uncertainty Intervals</li>
+                        <li>Adaptive Online Conformal Recalibration (ACI)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
