@@ -4,7 +4,8 @@
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #0f172a;
-    background-color: #f8fafc;
+    background: radial-gradient(circle at 50% 0%, #f0f7ff 0%, #e0eaff 100%);
+    min-height: 100vh;
   }
 
   h1, h2, h3, .font-masthead {
@@ -20,99 +21,127 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Crisp, Professional Light Theme Surface System */
-.neu-card {
+/* Subtle dot-grid pattern background */
+.dot-grid-bg {
+  background-color: transparent;
+  background-image: radial-gradient(#94a3b8 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* 3D Map Container Styles as requested */
+.map-3d-container {
   background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.neu-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px 0 rgba(15, 23, 42, 0.07);
-}
-
-.neu-card-convex {
-  background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 6px -1px rgba(15, 23, 42, 0.06), 0 1px 4px -1px rgba(15, 23, 42, 0.04);
-}
-
-.neu-inset {
-  background: #f8fafc;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.03);
-}
-
-.neu-btn {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.neu-btn:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
-  color: #1d4ed8;
-}
-
-.neu-btn:active, .neu-btn-active {
-  background: #2563eb;
-  color: #ffffff !important;
-  border-color: #1d4ed8;
-  box-shadow: 0 1px 3px 0 rgba(37, 99, 235, 0.3);
-}
-
-.neu-badge {
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-}
-
-.neu-dial {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 5px 0 rgba(15, 23, 42, 0.06);
-}
-
-/* 3D Isometric Map Stage Styling */
-.map-3d-perspective {
-  perspective: 1100px;
-}
-
-.map-3d-tilt {
-  transform: rotateX(24deg) rotateZ(-3deg) translateY(-10px);
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  transform: perspective(1200px) rotateX(6deg) rotateY(-1deg);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   transform-style: preserve-3d;
-  box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
 }
 
-.map-3d-tilt:hover {
-  transform: rotateX(18deg) rotateZ(-1deg) translateY(-16px);
+.map-3d-container:hover {
+  transform: perspective(1200px) rotateX(3deg) rotateY(0deg);
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.38);
 }
 
-.map-flat {
-  transform: none;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+/* Realistic Cartographic State Path (No geometric displacement) */
+.state-path-3d {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+  transition: fill 0.2s ease, stroke 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
 }
 
-.code-chip {
-  font-family: 'JetBrains Mono', monospace;
-  background-color: #f1f5f9;
-  color: #0f172a;
-  padding: 2px 7px;
-  border-radius: 6px;
-  font-size: 0.82em;
-  border: 1px solid #e2e8f0;
+.state-path-3d:hover {
+  filter: brightness(1.08) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+  stroke: #0f172a;
+  stroke-width: 2.2px;
 }
 
-/* IMD Tricolor stripe */
+.state-high-risk-glow {
+  filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.6)) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* 3D Pins as requested */
+.pin-3d {
+  position: absolute;
+  width: 4px;
+  height: 60px;
+  background: linear-gradient(to bottom, #ef4444, #7f1d1d);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.pin-3d::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: #ff1a1a;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.9);
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Crisp Neumorphic & Elevated Cards (No subpixel text-blurring 3D perspective) */
+.card-3d-neu {
+  border-radius: 18px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.card-3d-neu:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -6px rgba(15, 23, 42, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.06);
+}
+
+/* High-risk Alert Card */
+.card-3d-alert {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(254, 202, 202, 0.4);
+  box-shadow: 0 12px 28px -4px rgba(220, 38, 38, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.card-3d-alert:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -4px rgba(220, 38, 38, 0.45);
+}
+
+/* Tricolor stripe */
 .tricolor-stripe {
   background: linear-gradient(90deg, #ff9933 0%, #ff9933 33.3%, #ffffff 33.3%, #ffffff 66.6%, #138808 66.6%, #138808 100%);
   height: 4px;
+}
+
+/* Print Styles for PDF Export */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .map-3d-container {
+    transform: none !important;
+    box-shadow: none !important;
+    border: 1px solid #94a3b8 !important;
+  }
 }

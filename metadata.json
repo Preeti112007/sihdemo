@@ -1,6 +1,6 @@
 {
-  "name": "SIH26079 Forecast Bust Detection",
-  "description": "AI-Based Forecast Bust Detection for Medium-Range Weather Forecasts (GFS / ECMWF) for the Indian subcontinent.",
+  "name": "IMD NWP Divergence System | SIH26079 | SIH 2025 | MoES",
+  "description": "Prediction of forecast error divergence between AI and Physics NWP models with 3D cartography and conformal intervals.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
