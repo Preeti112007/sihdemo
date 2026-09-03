@@ -1,0 +1,8 @@
+{
+  "name": "SIH26079 Forecast Bust Detection",
+  "description": "AI-Based Forecast Bust Detection for Medium-Range Weather Forecasts (GFS / ECMWF) for the Indian subcontinent.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
